@@ -1,0 +1,8 @@
+CMakeFiles/
+CMakeCache.txt
+code
+*.o
+*.d
+test.p
+test_anti.p
+test_anti_diff.p
