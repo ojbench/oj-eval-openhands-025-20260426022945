@@ -65,6 +65,16 @@ public:
         return new SetStatement(transformVariable(node->name), transformExpression(node->value));
     }
 
+    Expression *transformIntegerLiteral(IntegerLiteral *node) override {
+        if (rand() % 2 == 0) {
+            if (rand() % 2 == 0)
+                return new CallExpression("+", {new IntegerLiteral(node->value), new IntegerLiteral(0)});
+            else
+                return new CallExpression("-", {new IntegerLiteral(node->value), new IntegerLiteral(0)});
+        }
+        return new IntegerLiteral(node->value);
+    }
+
     Statement *transformBlockStatement(BlockStatement *node) override {
         vector<Statement *> body;
         for (auto stmt : node->body) {
