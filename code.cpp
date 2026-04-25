@@ -190,14 +190,19 @@ public:
         vector<int> res;
         if (node->is<IntegerLiteral>()) {
             res.push_back(7);
+            // res.push_back(node->as<IntegerLiteral>()->value); // Value might be changed
         } else if (node->is<Variable>()) {
             res.push_back(8);
         } else if (node->is<CallExpression>()) {
             res.push_back(9);
-            // We could add the function name hash here if it's a builtin
             string func = node->as<CallExpression>()->func;
             if (builtinFunctions.count(func)) {
-                res.push_back(hash<string>{}(func) % 1000 + 1000);
+                // Use a stable hash for builtin functions
+                int h = 0;
+                for (char c : func) h = h * 31 + c;
+                res.push_back(h % 1000 + 1000);
+            } else {
+                res.push_back(2000); // User function call
             }
             for (auto arg : node->as<CallExpression>()->args) {
                 auto e = visitExpression(arg);
